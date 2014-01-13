@@ -184,19 +184,12 @@ var eventInit = {
  * @type {Object}
  */
 var eventParameters = {
-  ititEvent: [
-    'bubbles',
-    'cancelable'
-  ],
+  ititEvent: [],
   initUIEvent: [
-    'bubbles',
-    'cancelable',
     'view',
     'detail'
   ],
   initKeyboardEvent: [
-    'bubbles',
-    'cancelable',
     'view',
     'char',
     'key',
@@ -206,8 +199,6 @@ var eventParameters = {
     'locale'
   ],
   initMouseEvent: [
-    'bubbles',
-    'cancelable',
     'view',
     'detail',
     'screenX',
@@ -222,45 +213,33 @@ var eventParameters = {
     'relatedTarget'
   ],
   initHashChangeEvent: [
-    'bubbles',
-    'cancelable',
     'oldURL',
     'newURL'
   ],
   initCompositionEvent: [
-    'bubbles',
-    'cancelable',
     'view',
     'data',
     'locale'
   ],
   initDeviceMotionEvent: [
-    'bubbles',
-    'cancelable',
     'acceleration',
     'accelerationIncludingGravity',
     'rotationRate',
     'interval'
   ],
   initDeviceOrientationEvent: [
-    'bubbles',
-    'cancelable',
     'alpha',
     'beta',
     'gamma',
     'absolute'
   ],
   initMessageEvent: [
-    'bubbles',
-    'cancelable',
     'data',
     'origin',
     'lastEventId',
     'source'
   ],
   initStorageEvent: [
-    'bubbles',
-    'cancelable',
     'key',
     'oldValue',
     'newValue',
@@ -308,7 +287,9 @@ module.exports = function (element, type, options) {
   });
 
   // Initialize the event using the built-in method.
-  event[initEvent].apply(event, [type].concat(args));
+  event[initEvent].apply(
+    event, [type, event.bubbles, event.cancelable].concat(args)
+  );
 
   return element.dispatchEvent(event);
 };
