@@ -112,6 +112,7 @@ var eventTypes = {
   dragleave:          'UIEvent',
   dragover:           'UIEvent',
   dragstart:          'UIEvent',
+  dragend:            'UIEvent',
   drop:               'UIEvent',
   touchcancel:        'UIEvent',
   touchend:           'UIEvent',
