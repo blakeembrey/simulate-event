@@ -161,7 +161,7 @@ var eventTypes = {
  * @type {Object}
  */
 var eventInit = {
-  Event:                  'ititEvent',
+  Event:                  'initEvent',
   UIEvent:                'initUIEvent',
   FocusEvent:             'initUIEvent',
   MouseEvent:             'initMouseEvent',
@@ -185,7 +185,7 @@ var eventInit = {
  * @type {Object}
  */
 var eventParameters = {
-  ititEvent: [],
+  initEvent: [],
   initUIEvent: [
     'view',
     'detail'
