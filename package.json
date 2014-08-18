@@ -15,7 +15,11 @@
     "mouse",
     "keyboard"
   ],
-  "author": "Blake Embrey",
+  "author": {
+    "name": "Blake Embrey",
+    "email": "hello@blakeembrey.com",
+    "url": "http://blakeembrey.me"
+  },
   "license": "MIT",
   "devDependencies": {
     "grunt-newer": "~0.6.0",
