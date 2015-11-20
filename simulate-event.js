@@ -1,4 +1,3 @@
-var map    = require('./lib/map');
 var extend = require('./lib/extend');
 var result = require('./lib/result');
 
@@ -283,7 +282,7 @@ module.exports = function (element, type, options) {
   event = extend(document.createEvent(eventType), options);
 
   // Map argument names to the option values.
-  var args = map(eventParameters[initEvent], function (parameter) {
+  var args = eventParameters[initEvent].map(function (parameter) {
     return options[parameter];
   });
 
