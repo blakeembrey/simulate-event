@@ -99,7 +99,7 @@ module.exports = function (grunt) {
      */
     watch: {
       build: {
-        files: ['lib/**/*.js'],
+        files: ['<%= jshint.all.src %>'],
         tasks: ['build']
       },
       lint: {
