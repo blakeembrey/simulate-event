@@ -6,7 +6,7 @@
   "scripts": {
     "build": "grunt build",
     "dev": "grunt watch:build & karma start",
-    "test": "karma start --single-run --browsers PhantomJS"
+    "test": "npm run build && karma start --single-run --browsers PhantomJS"
   },
   "repository": "https://github.com/blakeembrey/simulate-event",
   "keywords": [
