@@ -1,0 +1,28 @@
+/* global describe, it, simulateEvent, sinon, expect */
+
+describe('UI Events', function () {
+  var events = 'blur focus focusin focusout'.split(' ');
+  var fixture;
+
+  beforeEach(function () {
+    fixture = document.createElement('input');
+    document.body.appendChild(fixture);
+  });
+
+  afterEach(function () {
+    fixture.parentNode.removeChild(fixture);
+    fixture = null;
+  });
+
+  events.forEach(function (eventName) {
+    it('should trigger', function () {
+      var spy = sinon.spy();
+
+      fixture.addEventListener(eventName, spy);
+      simulateEvent(fixture, eventName);
+
+      expect(spy).to.have.been.calledOnce;
+    });
+  });
+
+});

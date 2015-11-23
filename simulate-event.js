@@ -1,4 +1,3 @@
-var map    = require('./lib/map');
 var extend = require('./lib/extend');
 var result = require('./lib/result');
 
@@ -120,10 +119,10 @@ var eventTypes = {
   touchleave:         'UIEvent',
   touchmove:          'UIEvent',
   touchstart:         'UIEvent',
-  blur:               'FocusEvent',
-  focus:              'FocusEvent',
-  focusin:            'FocusEvent',
-  focusout:           'FocusEvent',
+  blur:               'UIEvent',
+  focus:              'UIEvent',
+  focusin:            'UIEvent',
+  focusout:           'UIEvent',
   show:               'MouseEvent',
   click:              'MouseEvent',
   dblclick:           'MouseEvent',
@@ -283,7 +282,7 @@ module.exports = function (element, type, options) {
   event = extend(document.createEvent(eventType), options);
 
   // Map argument names to the option values.
-  var args = map(eventParameters[initEvent], function (parameter) {
+  var args = eventParameters[initEvent].map(function (parameter) {
     return options[parameter];
   });
 

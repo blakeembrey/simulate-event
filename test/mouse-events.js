@@ -2,6 +2,7 @@
 
 describe('Mouse Events', function () {
   var fixture = document.createElement('div');
+  document.body.appendChild(fixture);
 
   describe('click', function () {
     it('should trigger', function () {
