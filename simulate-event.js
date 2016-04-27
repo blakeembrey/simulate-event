@@ -279,7 +279,7 @@ module.exports = function (element, type, options) {
   if (eventType === 'KeyboardEvent' && options) {
     overrides['keyCode'] = options['keyCode'] || 0;
     overrides['key'] = options['key'] || '';
-    overrides['which'] = options['which'] || options['keyCode'] || 0;
+    overrides['which'] = options['which'] || overrides['keyCode'];
   }
 
   // In IE11, the Keyboard event does not allow setting the
