@@ -199,9 +199,6 @@ var eventParameters = {
     'locale'
   ],
   initKeyEvent: [
-    'type', 
-    'bubbles', 
-    'cancelable', 
     'view', 
     'ctrlKey', 
     'altKey', 
@@ -274,6 +271,7 @@ module.exports = function (element, type, options) {
     throw new SyntaxError('Unsupported event type');
   }
 
+  var original = options;
   var eventType = eventTypes[type];
   var initEvent = eventInit[eventType];
   var event;
@@ -283,6 +281,9 @@ module.exports = function (element, type, options) {
     bubbles:    true,
     cancelable: true
   }, result(eventOptions, eventType, element, type, options), options);
+
+  // Preserve the original or use the new options if none were given.
+  if (!original) original = options;
 
   // In < IE9, the `createEvent` function is not available and we have to
   // resort to using `fireEvent`.
@@ -320,11 +321,11 @@ module.exports = function (element, type, options) {
   // Work around limitations in the keyboard initialization.
   if (eventType === 'KeyboardEvent') {
     Object.defineProperty(event, 'keyCode', 
-      { value: options['keyCode'] || 0 });
+      { value: original['keyCode'] || 0 });
     Object.defineProperty(event, 'key', 
-      { value: options['key'] || 'A' });
+      { value: original['key'] || '' });
     Object.defineProperty(event, 'which', 
-      { value: options['which'] || options['keyCode'] || 0 });
+      { value: original['which'] || options['keyCode'] || 0 });
   }
 
   return element.dispatchEvent(event);

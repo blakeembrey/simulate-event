@@ -19,6 +19,25 @@ describe('Mouse Events', function () {
       expect(evt.ctrlKey).to.equal(true);
       expect(evt.button).to.equal(1);
     });
+
+    it('should clone an existing event', function () {
+      var spy = sinon.spy();
+
+      fixture.addEventListener('click', spy);
+      simulateEvent(fixture, 'click', 
+        { clientX: 10, ctrlKey: true, button: 1} );
+
+      expect(spy).to.have.been.calledOnce;
+
+      var evt = spy.getCall(0).args[0];
+
+      simulateEvent(fixture, 'click', evt);
+
+      var clone = spy.getCall(1).args[0];
+      expect(clone.clientX).to.equal(10);
+      expect(clone.ctrlKey).to.equal(true);
+      expect(clone.button).to.equal(1);
+    });
   });
 
   describe('mousedown', function () {
