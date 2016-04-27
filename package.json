@@ -6,6 +6,7 @@
   "typings": "simulate-event.d.ts",
   "files": [
     "simulate-event.js",
+    "simulate-event.d.ts",
     "lib/"
   ],
   "scripts": {
