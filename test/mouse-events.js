@@ -5,13 +5,19 @@ describe('Mouse Events', function () {
   document.body.appendChild(fixture);
 
   describe('click', function () {
-    it('should trigger', function () {
+    it('should trigger with the correct options', function () {
       var spy = sinon.spy();
 
       fixture.addEventListener('click', spy);
-      simulateEvent(fixture, 'click');
+      simulateEvent(fixture, 'click', 
+        { clientX: 10, ctrlKey: true, button: 1} );
 
       expect(spy).to.have.been.calledOnce;
+
+      var evt = spy.getCall(0).args[0];
+      expect(evt.clientX).to.equal(10);
+      expect(evt.ctrlKey).to.equal(true);
+      expect(evt.button).to.equal(1);
     });
   });
 
