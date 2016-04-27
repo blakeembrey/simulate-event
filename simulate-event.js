@@ -271,6 +271,9 @@ module.exports = function (element, type, options) {
     throw new SyntaxError('Unsupported event type');
   }
 
+  var original = options;
+  var origEventType = eventTypes[type];
+
   // In IE11, the Keyboard event does not allow setting the
   // keyCode property, even with Object.defineProperty,
   // so we have to use a UIEvent.
@@ -280,7 +283,6 @@ module.exports = function (element, type, options) {
     eventType = 'UIEvent'; 
   }
 
-  var original = options;
   var eventType = eventTypes[type];
   var initEvent = eventInit[eventType];
   var event;
@@ -328,7 +330,7 @@ module.exports = function (element, type, options) {
   );
 
   // Work around limitations in the keyboard initialization.
-  if (eventType === 'KeyboardEvent') {
+  if (origEventType === 'KeyboardEvent') {
     Object.defineProperty(event, 'keyCode', 
       { value: original['keyCode'] || 0 });
     Object.defineProperty(event, 'key', 
