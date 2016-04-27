@@ -272,6 +272,23 @@ var eventConstructors = {
 
 
 /**
+ * Get attributes which must be overriden manually.
+ *
+ * @param {String} eventType
+ * @param {Object} options.
+ */
+function getOverrides (eventType, options) {
+  if (eventType === 'KeyboardEvent' && options) {
+    return { 
+      keyCode: options.keyCode || 0,
+      key: options.key || 0,
+      which: options.which || options.keyCode || 0
+    }
+  }
+}
+
+
+/**
  * Exports the similate functionality.
  *
  * @param  {Element} element
@@ -290,12 +307,7 @@ module.exports = function (element, type, options) {
 
   // Handle parameters which must be manually overridden using
   // Object.defineProperty.
-  var overrides = {};
-  if (eventType === 'KeyboardEvent' && options) {
-    overrides['keyCode'] = options['keyCode'] || 0;
-    overrides['key'] = options['key'] || '';
-    overrides['which'] = options['which'] || overrides['keyCode'];
-  }
+  var overrides = getOverrides(eventType, options);
 
   // Attempt the Event Constructors DOM API.
   var constructor = eventConstructors[eventType];
