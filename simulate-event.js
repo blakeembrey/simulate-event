@@ -257,6 +257,20 @@ var eventParameters = {
   ]
 };
 
+
+/**
+ * Map the event types to constructors.
+ *
+ * @type {Object}
+ */
+var eventConstructors = {
+  UIEvent: UIEvent,
+  FocusEvent: FocusEvent,
+  MouseEvent: MouseEvent,
+  KeyboardEvent: KeyboardEvent
+}
+
+
 /**
  * Exports the similate functionality.
  *
@@ -272,6 +286,7 @@ module.exports = function (element, type, options) {
   }
 
   var eventType = eventTypes[type];
+  var event;
 
   // Handle parameters which must be manually overridden using
   // Object.defineProperty.
@@ -280,6 +295,19 @@ module.exports = function (element, type, options) {
     overrides['keyCode'] = options['keyCode'] || 0;
     overrides['key'] = options['key'] || '';
     overrides['which'] = options['which'] || overrides['keyCode'];
+  }
+
+  // Attempt the Event Constructors DOM API.
+  var constructor = eventConstructors[eventType];
+  try {
+    event = new constructor(type, options);
+    // Add the override properties.
+    for (var key in overrides) {
+      Object.defineProperty(event, key, { value: overrides[key] });
+    }
+    return element.dispatchEvent(event);
+  } catch (e) {
+    // Continue.
   }
 
   // In IE11, the Keyboard event does not allow setting the
@@ -292,7 +320,7 @@ module.exports = function (element, type, options) {
   }
 
   var initEvent = eventInit[eventType];
-  var event;
+  
 
   // Extend a new object with the default and passed in options.
   options = extend({
