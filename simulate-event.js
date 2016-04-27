@@ -304,6 +304,10 @@ module.exports = function (element, type, options) {
   // resort to using `fireEvent`.
   if (!document.createEvent) {
     event = extend(document.createEventObject(), options);
+    // Add the override properties.
+    for (var key in overrides) {
+      Object.defineProperty(event, key, { value: overrides[key] });
+    }
     return element.fireEvent('on' + type, event);
   }
 
