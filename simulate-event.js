@@ -198,6 +198,18 @@ var eventParameters = {
     'repeat',
     'locale'
   ],
+  initKeyEvent: [
+    'type', 
+    'bubbles', 
+    'cancelable', 
+    'view', 
+    'ctrlKey', 
+    'altKey', 
+    'shiftKey', 
+    'metaKey', 
+    'keyCode', 
+    'charCode'
+  ],
   initMouseEvent: [
     'view',
     'detail',
@@ -281,6 +293,20 @@ module.exports = function (element, type, options) {
 
   event = extend(document.createEvent(eventType), options);
 
+  // Handle differences between `initKeyboardEvent` and `initKeyEvent`.
+  if (initEvent === 'initKeyboardEvent') {
+    if (event[initEvent] === void 0) {
+      initEvent = 'initKeyEvent';
+    } else if (!('modifiersList' in options)) {
+      var mods = []
+      if (options.metaKey) mods.push('Meta');
+      if (options.altKey) mods.push('Alt');
+      if (options.shiftKey) mods.push('Shift');
+      if (options.ctrlKey) mods.push('Control');
+      options['modifiersList'] = mods.join(' ');
+    }
+  }
+
   // Map argument names to the option values.
   var args = eventParameters[initEvent].map(function (parameter) {
     return options[parameter];
@@ -290,6 +316,16 @@ module.exports = function (element, type, options) {
   event[initEvent].apply(
     event, [type, event.bubbles, event.cancelable].concat(args)
   );
+
+  // Work around limitations in the keyboard initialization.
+  if (eventType === 'KeyboardEvent') {
+    Object.defineProperty(event, 'keyCode', 
+      { value: options['keyCode'] || 0 });
+    Object.defineProperty(event, 'key', 
+      { value: options['key'] || 'A' });
+    Object.defineProperty(event, 'which', 
+      { value: options['which'] || options['keyCode'] || 0 });
+  }
 
   return element.dispatchEvent(event);
 };
