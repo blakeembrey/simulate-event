@@ -271,8 +271,16 @@ module.exports = function (element, type, options) {
     throw new SyntaxError('Unsupported event type');
   }
 
-  var original = options;
   var eventType = eventTypes[type];
+
+  // Handle parameters which must be manually overridden using
+  // Object.defineProperty.
+  var overrides = {};
+  if (eventType === 'KeyboardEvent' && options) {
+    overrides['keyCode'] = options['keyCode'] || 0;
+    overrides['key'] = options['key'] || '';
+    overrides['which'] = options['which'] || options['keyCode'] || 0;
+  }
 
   // In IE11, the Keyboard event does not allow setting the
   // keyCode property, even with Object.defineProperty,
@@ -291,9 +299,6 @@ module.exports = function (element, type, options) {
     bubbles:    true,
     cancelable: true
   }, result(eventOptions, eventType, element, type, options), options);
-
-  // Preserve the original or use the new options if none were given.
-  if (!original) original = options;
 
   // In < IE9, the `createEvent` function is not available and we have to
   // resort to using `fireEvent`.
@@ -328,14 +333,9 @@ module.exports = function (element, type, options) {
     event, [type, event.bubbles, event.cancelable].concat(args)
   );
 
-  // Work around limitations in the keyboard initialization.
-  if (eventType === 'KeyboardEvent') {
-    Object.defineProperty(event, 'keyCode',
-      { value: original['keyCode'] || 0 });
-    Object.defineProperty(event, 'key',
-      { value: original['key'] || '' });
-    Object.defineProperty(event, 'which',
-      { value: original['which'] || options['keyCode'] || 0 });
+  // Add the override properties.
+  for (var key in overrides) {
+    Object.defineProperty(event, key, { value: overrides[key] });
   }
 
   return element.dispatchEvent(event);
