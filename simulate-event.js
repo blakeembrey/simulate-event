@@ -199,12 +199,12 @@ var eventParameters = {
     'locale'
   ],
   initKeyEvent: [
-    'view', 
-    'ctrlKey', 
-    'altKey', 
-    'shiftKey', 
-    'metaKey', 
-    'keyCode', 
+    'view',
+    'ctrlKey',
+    'altKey',
+    'shiftKey',
+    'metaKey',
+    'keyCode',
     'charCode'
   ],
   initMouseEvent: [
@@ -272,7 +272,7 @@ module.exports = function (element, type, options) {
   }
 
   var original = options;
-  var origEventType = eventTypes[type];
+  var eventType = eventTypes[type];
 
   // In IE11, the Keyboard event does not allow setting the
   // keyCode property, even with Object.defineProperty,
@@ -280,10 +280,9 @@ module.exports = function (element, type, options) {
   var ua = window.navigator.userAgent;
   var msie = ua.indexOf('MSIE ');
   if (msie > 0 && eventType === 'KeyboardEvent') {
-    eventType = 'UIEvent'; 
+    eventType = 'UIEvent';
   }
 
-  var eventType = eventTypes[type];
   var initEvent = eventInit[eventType];
   var event;
 
@@ -330,12 +329,12 @@ module.exports = function (element, type, options) {
   );
 
   // Work around limitations in the keyboard initialization.
-  if (origEventType === 'KeyboardEvent') {
-    Object.defineProperty(event, 'keyCode', 
+  if (eventType === 'KeyboardEvent') {
+    Object.defineProperty(event, 'keyCode',
       { value: original['keyCode'] || 0 });
-    Object.defineProperty(event, 'key', 
+    Object.defineProperty(event, 'key',
       { value: original['key'] || '' });
-    Object.defineProperty(event, 'which', 
+    Object.defineProperty(event, 'which',
       { value: original['which'] || options['keyCode'] || 0 });
   }
 
