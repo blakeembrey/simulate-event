@@ -198,6 +198,15 @@ var eventParameters = {
     'repeat',
     'locale'
   ],
+  initKeyEvent: [
+    'view',
+    'ctrlKey',
+    'altKey',
+    'shiftKey',
+    'metaKey',
+    'keyCode',
+    'charCode'
+  ],
   initMouseEvent: [
     'view',
     'detail',
@@ -248,6 +257,37 @@ var eventParameters = {
   ]
 };
 
+
+/**
+ * Map the event types to constructors.
+ *
+ * @type {Object}
+ */
+var eventConstructors = {
+  UIEvent: UIEvent,
+  FocusEvent: FocusEvent,
+  MouseEvent: MouseEvent,
+  KeyboardEvent: KeyboardEvent
+}
+
+
+/**
+ * Get attributes which must be overriden manually.
+ *
+ * @param {String} eventType
+ * @param {Object} options.
+ */
+function getOverrides (eventType, options) {
+  if (eventType === 'KeyboardEvent' && options) {
+    return { 
+      keyCode: options.keyCode || 0,
+      key: options.key || 0,
+      which: options.which || options.keyCode || 0
+    }
+  }
+}
+
+
 /**
  * Exports the similate functionality.
  *
@@ -263,8 +303,36 @@ module.exports = function (element, type, options) {
   }
 
   var eventType = eventTypes[type];
-  var initEvent = eventInit[eventType];
   var event;
+
+  // Handle parameters which must be manually overridden using
+  // Object.defineProperty.
+  var overrides = getOverrides(eventType, options);
+
+  // Attempt the Event Constructors DOM API.
+  var constructor = eventConstructors[eventType];
+  try {
+    event = new constructor(type, options);
+    // Add the override properties.
+    for (var key in overrides) {
+      Object.defineProperty(event, key, { value: overrides[key] });
+    }
+    return element.dispatchEvent(event);
+  } catch (e) {
+    // Continue.
+  }
+
+  // In IE11, the Keyboard event does not allow setting the
+  // keyCode property, even with Object.defineProperty,
+  // so we have to use a UIEvent.
+  var ua = window.navigator.userAgent;
+  var msie = ua.indexOf('MSIE ');
+  if (msie > 0 && eventType === 'KeyboardEvent') {
+    eventType = 'UIEvent';
+  }
+
+  var initEvent = eventInit[eventType];
+  
 
   // Extend a new object with the default and passed in options.
   options = extend({
@@ -276,10 +344,28 @@ module.exports = function (element, type, options) {
   // resort to using `fireEvent`.
   if (!document.createEvent) {
     event = extend(document.createEventObject(), options);
+    // Add the override properties.
+    for (var key in overrides) {
+      Object.defineProperty(event, key, { value: overrides[key] });
+    }
     return element.fireEvent('on' + type, event);
   }
 
   event = extend(document.createEvent(eventType), options);
+
+  // Handle differences between `initKeyboardEvent` and `initKeyEvent`.
+  if (initEvent === 'initKeyboardEvent') {
+    if (event[initEvent] === void 0) {
+      initEvent = 'initKeyEvent';
+    } else if (!('modifiersList' in options)) {
+      var mods = []
+      if (options.metaKey) mods.push('Meta');
+      if (options.altKey) mods.push('Alt');
+      if (options.shiftKey) mods.push('Shift');
+      if (options.ctrlKey) mods.push('Control');
+      options['modifiersList'] = mods.join(' ');
+    }
+  }
 
   // Map argument names to the option values.
   var args = eventParameters[initEvent].map(function (parameter) {
@@ -290,6 +376,11 @@ module.exports = function (element, type, options) {
   event[initEvent].apply(
     event, [type, event.bubbles, event.cancelable].concat(args)
   );
+
+  // Add the override properties.
+  for (var key in overrides) {
+    Object.defineProperty(event, key, { value: overrides[key] });
+  }
 
   return element.dispatchEvent(event);
 };
