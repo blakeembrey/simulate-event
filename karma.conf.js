@@ -48,7 +48,6 @@ module.exports = function (config) {
      */
     reporters: ['progress', 'coverage'],
 
-
     /**
      * Web server port number.
      *
@@ -112,5 +111,5 @@ module.exports = function (config) {
      * @type {Boolean}
      */
     singleRun: true
-  });
-};
+  })
+}
