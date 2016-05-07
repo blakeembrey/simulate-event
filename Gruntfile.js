@@ -4,10 +4,10 @@
  * @type {Object}
  */
 var debugOptions = {
-  debug:      true,
-  transform:  [],
+  debug: true,
+  transform: [],
   standalone: 'simulateEvent'
-};
+}
 
 /**
  * Options for a minified Browserify build.
@@ -15,10 +15,10 @@ var debugOptions = {
  * @type {Object}
  */
 var minifyOptions = {
-  debug:      false,
-  transform:  ['uglifyify'],
+  debug: false,
+  transform: ['uglifyify'],
   standalone: 'simulateEvent'
-};
+}
 
 /**
  * Initialize the grunt configuration script.
@@ -26,23 +26,9 @@ var minifyOptions = {
  * @param {Object} grunt
  */
 module.exports = function (grunt) {
-  require('load-grunt-tasks')(grunt);
+  require('load-grunt-tasks')(grunt)
 
   grunt.initConfig({
-    /**
-     * Lint all JavaScript according the current JSHint config.
-     *
-     * @type {Object}
-     */
-    jshint: {
-      all: {
-        src: ['lib/**/*.js', 'test/**/*.js', '*.js']
-      },
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
-
     /**
      * Compile browser-side modules for simplified consumption.
      *
@@ -50,12 +36,12 @@ module.exports = function (grunt) {
      */
     browserify: {
       debug: {
-        src:  'simulate-event.js',
+        src: 'simulate-event.js',
         dest: 'dist/simulate-event.js',
         options: debugOptions
       },
       minify: {
-        src:  'simulate-event.js',
+        src: 'simulate-event.js',
         dest: 'dist/simulate-event.min.js',
         options: minifyOptions
       }
@@ -111,9 +97,9 @@ module.exports = function (grunt) {
         tasks: ['karma:unit:run']
       }
     }
-  });
+  })
 
-  grunt.registerTask('test',    ['jshint', 'karma:ci']);
-  grunt.registerTask('build',   ['browserify', 'uglify']);
-  grunt.registerTask('default', ['build', 'karma:unit', 'watch']);
-};
+  grunt.registerTask('test', ['jshint', 'karma:ci'])
+  grunt.registerTask('build', ['browserify', 'uglify'])
+  grunt.registerTask('default', ['build', 'karma:unit', 'watch'])
+}
