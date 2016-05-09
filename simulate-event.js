@@ -1,3 +1,4 @@
+var extend = require('xtend')
 
 /**
  * Set some default options.
@@ -265,24 +266,6 @@ var eventConstructors = {
   FocusEvent: window.FocusEvent,
   MouseEvent: window.MouseEvent,
   KeyboardEvent: window.KeyboardEvent
-}
-
-/**
- * Extend an object using the properties of the argument objects.
- *
- * @param  {target} Object
- * @return {Object}
- */
-function extend (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i]
-    for (var key in source) {
-      if (Object.hasOwnProperty(source, key)) {
-        target[key] = source[key]
-      }
-    }
-  }
-  return target
 }
 
 /**
