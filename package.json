@@ -67,6 +67,5 @@
     "uglifyify": "^1.0.1"
   },
   "dependencies": {
-    "xtend": "^4.0.1"
   }
 }

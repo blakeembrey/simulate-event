@@ -10,7 +10,7 @@ describe('Key Events', function () {
 
       fixture.addEventListener('keydown', spy)
 
-      simulateEvent(fixture, 'keydown',
+      simulateEvent.simulate(fixture, 'keydown',
         { keyCode: 27, key: 'A', altKey: true })
 
       expect(spy).to.have.been.calledOnce
@@ -26,19 +26,28 @@ describe('Key Events', function () {
 
       fixture.addEventListener('keydown', spy)
 
-      simulateEvent(fixture, 'keydown',
+      simulateEvent.simulate(fixture, 'keydown',
         { keyCode: 27, key: 'A', altKey: true })
 
       expect(spy).to.have.been.calledOnce
 
       var evt = spy.getCall(0).args[0]
 
-      simulateEvent(fixture, 'keydown', evt)
+      simulateEvent.simulate(fixture, 'keydown', evt)
 
       var clone = spy.getCall(1).args[0]
       expect(clone.keyCode).to.equal(27)
       expect(clone.key).to.equal('A')
       expect(clone.altKey).to.equal(true)
+    })
+
+    it('should generate an event', function () {
+      var evt = simulateEvent.generate('keydown',
+        { keyCode: 27, key: 'A', altKey: true })
+      expect(evt.keyCode).to.equal(27)
+      expect(evt.key).to.equal('A')
+      expect(evt.altKey).to.equal(true)
+      expect(evt.type).to.equal('keydown')
     })
   })
 
@@ -48,7 +57,7 @@ describe('Key Events', function () {
 
       fixture.addEventListener('keyup', spy)
 
-      simulateEvent(fixture, 'keyup')
+      simulateEvent.simulate(fixture, 'keyup')
 
       expect(spy).to.have.been.calledOnce
     })
