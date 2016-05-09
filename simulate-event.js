@@ -291,7 +291,7 @@ function getOverrides (eventType, options) {
  * @param  {Object}  options
  * @return {Event}
  */
-function generate (type, options) {
+exports.generate = function (type, options) {
   // Immediately throw an error when the event name does not translate.
   if (!eventTypes.hasOwnProperty(type)) {
     throw new SyntaxError('Unsupported event type')
@@ -400,8 +400,8 @@ function generate (type, options) {
  * @param  {Object}  options
  * @return {Boolean}
  */
-function simulate (element, type, options) {
-  var event = generate(type, options)
+exports.simulate = function (element, type, options) {
+  var event = exports.generate(type, options)
 
   // In < IE9, the `createEvent` function is not available and we have to
   // resort to using `fireEvent`.
@@ -410,7 +410,3 @@ function simulate (element, type, options) {
   }
   return element.dispatchEvent(event)
 }
-
-// Export the API functions.
-exports.simulate = simulate
-exports.generate = generate
