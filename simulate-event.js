@@ -429,5 +429,5 @@ function simulate (element, type, options) {
 }
 
 // Export the API functions.
-module.exports.simulate = simulate
-module.exports.generate = generate
+exports.simulate = simulate
+exports.generate = generate
