@@ -1,4 +1,6 @@
 
-declare function simulateEvent (element: HTMLElement, type: string, options?: any): boolean;
+export
+function generate(type: string, options?: any): Event;
 
-export = simulateEvent;
+export
+function simulate(element: HTMLElement, type: string, options?: any): boolean;

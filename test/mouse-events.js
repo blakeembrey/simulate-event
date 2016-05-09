@@ -9,7 +9,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('click', spy)
-      simulateEvent(fixture, 'click', {
+      simulateEvent.simulate(fixture, 'click', {
         clientX: 10, ctrlKey: true, button: 1
       })
 
@@ -25,7 +25,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('click', spy)
-      simulateEvent(fixture, 'click', {
+      simulateEvent.simulate(fixture, 'click', {
         clientX: 10, ctrlKey: true, button: 1
       })
 
@@ -33,12 +33,22 @@ describe('Mouse Events', function () {
 
       var evt = spy.getCall(0).args[0]
 
-      simulateEvent(fixture, 'click', evt)
+      simulateEvent.simulate(fixture, 'click', evt)
 
       var clone = spy.getCall(1).args[0]
       expect(clone.clientX).to.equal(10)
       expect(clone.ctrlKey).to.equal(true)
       expect(clone.button).to.equal(1)
+    })
+
+    it('should generate an event', function () {
+      var evt = simulateEvent.generate('click', {
+        clientX: 10, ctrlKey: true, button: 1
+      })
+      expect(evt.clientX).to.equal(10)
+      expect(evt.ctrlKey).to.equal(true)
+      expect(evt.button).to.equal(1)
+      expect(evt.type).to.equal('click')
     })
   })
 
@@ -47,7 +57,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mousedown', spy)
-      simulateEvent(fixture, 'mousedown')
+      simulateEvent.simulate(fixture, 'mousedown')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -58,7 +68,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mouseup', spy)
-      simulateEvent(fixture, 'mouseup')
+      simulateEvent.simulate(fixture, 'mouseup')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -69,7 +79,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mouseenter', spy)
-      simulateEvent(fixture, 'mouseenter')
+      simulateEvent.simulate(fixture, 'mouseenter')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -80,7 +90,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mouseleave', spy)
-      simulateEvent(fixture, 'mouseleave')
+      simulateEvent.simulate(fixture, 'mouseleave')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -91,7 +101,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mouseover', spy)
-      simulateEvent(fixture, 'mouseover')
+      simulateEvent.simulate(fixture, 'mouseover')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -102,7 +112,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mousemove', spy)
-      simulateEvent(fixture, 'mousemove')
+      simulateEvent.simulate(fixture, 'mousemove')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -113,7 +123,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('mouseout', spy)
-      simulateEvent(fixture, 'mouseout')
+      simulateEvent.simulate(fixture, 'mouseout')
 
       expect(spy).to.have.been.calledOnce
     })
@@ -124,7 +134,7 @@ describe('Mouse Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener('contextmenu', spy)
-      simulateEvent(fixture, 'contextmenu')
+      simulateEvent.simulate(fixture, 'contextmenu')
 
       expect(spy).to.have.been.calledOnce
     })

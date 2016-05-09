@@ -6,15 +6,15 @@ var extend = require('xtend')
  * @type {Object}
  */
 var eventOptions = {
-  UIEvent: function (el) {
+  UIEvent: function () {
     return {
-      view: el.ownerDocument.defaultView
+      view: document.defaultView
     }
   },
   FocusEvent: function () {
     return eventOptions.UIEvent.apply(this, arguments)
   },
-  MouseEvent: function (el, type) {
+  MouseEvent: function (type) {
     return {
       button: 0,
       cancelable: (type !== 'mousemove'),
@@ -26,13 +26,13 @@ var eventOptions = {
       clientY: 1,
       screenX: 0,
       screenY: 0,
-      view: el.ownerDocument.defaultView,
-      relatedTarget: el.ownerDocument.documentElement
+      view: document.defaultView,
+      relatedTarget: document.documentElement
     }
   },
-  KeyboardEvent: function (el) {
+  KeyboardEvent: function () {
     return {
-      view: el.ownerDocument.defaultView,
+      view: document.defaultView,
       ctrlKey: false,
       altKey: false,
       shiftKey: false,
@@ -285,14 +285,13 @@ function getOverrides (eventType, options) {
 }
 
 /**
- * Exports the similate functionality.
+ * Generate an event.
  *
- * @param  {Element} element
  * @param  {String}  type
  * @param  {Object}  options
- * @return {Boolean}
+ * @return {Event}
  */
-module.exports = function (element, type, options) {
+exports.generate = function (type, options) {
   // Immediately throw an error when the event name does not translate.
   if (!eventTypes.hasOwnProperty(type)) {
     throw new SyntaxError('Unsupported event type')
@@ -319,7 +318,7 @@ module.exports = function (element, type, options) {
       })
     }
 
-    return element.dispatchEvent(event)
+    return event
   } catch (e) {
     // Continue.
   }
@@ -340,7 +339,7 @@ module.exports = function (element, type, options) {
   options = extend({
     bubbles: true,
     cancelable: true
-  }, eventOptions[eventType](element, type, options), options)
+  }, eventOptions[eventType](type, options), options)
 
   // In < IE9, the `createEvent` function is not available and we have to
   // resort to using `fireEvent`.
@@ -354,7 +353,7 @@ module.exports = function (element, type, options) {
       })
     }
 
-    return element.fireEvent('on' + type, event)
+    return event
   }
 
   event = extend(document.createEvent(eventType), options)
@@ -390,5 +389,24 @@ module.exports = function (element, type, options) {
     })
   }
 
+  return event
+}
+
+/**
+ * Simulate an event which is dispatched on the given element.
+ *
+ * @param  {Element} element
+ * @param  {String}  type
+ * @param  {Object}  options
+ * @return {Boolean}
+ */
+exports.simulate = function (element, type, options) {
+  var event = exports.generate(type, options)
+
+  // In < IE9, the `createEvent` function is not available and we have to
+  // resort to using `fireEvent`.
+  if (!document.createEvent) {
+    return element.fireEvent('on' + type, event)
+  }
   return element.dispatchEvent(event)
 }

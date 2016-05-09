@@ -19,9 +19,12 @@ describe('UI Events', function () {
       var spy = sinon.spy()
 
       fixture.addEventListener(eventName, spy)
-      simulateEvent(fixture, eventName)
+      simulateEvent.simulate(fixture, eventName)
 
       expect(spy).to.have.been.calledOnce
+
+      var evt = simulateEvent.generate(eventName)
+      expect(evt.type).to.equal(eventName)
     })
   })
 })

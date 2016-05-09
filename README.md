@@ -16,7 +16,11 @@ npm install simulate-event --save-dev
 ## Usage
 
 ```javascript
-simulateEvent(document.body, 'click');
+// Simulate an event on an element
+simulateEvent.simulate(document.body, 'click');
+
+// Generate an event for custom use
+var evt = simulateEvent.generate('click', { clientX: 10 });
 ```
 
 ## License
