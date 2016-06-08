@@ -305,6 +305,14 @@ exports.generate = function (type, options) {
   // `Object.defineProperty`.
   var overrides = getOverrides(eventType, options)
 
+  // Extend a new object with the default and passed in options.
+  if (!(options instanceof window.UIEvent)) {
+    options = extend({
+      bubbles: true,
+      cancelable: true
+    }, eventOptions[eventType](type, options), options)
+  }
+
   // Attempt the Event Constructors DOM API.
   var Constructor = eventConstructors[eventType]
 
@@ -334,12 +342,6 @@ exports.generate = function (type, options) {
   }
 
   var initEvent = eventInit[eventType]
-
-  // Extend a new object with the default and passed in options.
-  options = extend({
-    bubbles: true,
-    cancelable: true
-  }, eventOptions[eventType](type, options), options)
 
   // In < IE9, the `createEvent` function is not available and we have to
   // resort to using `fireEvent`.
