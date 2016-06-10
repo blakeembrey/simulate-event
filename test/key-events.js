@@ -19,6 +19,7 @@ describe('Key Events', function () {
       expect(evt.keyCode).to.equal(27)
       expect(evt.key).to.equal('A')
       expect(evt.altKey).to.equal(true)
+      expect(evt.bubbles).to.equal(true)
     })
 
     it('should clone an existing event', function () {
