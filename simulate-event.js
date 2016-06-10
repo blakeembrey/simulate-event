@@ -6,13 +6,16 @@ var extend = require('xtend')
  * @type {Object}
  */
 var eventOptions = {
-  UIEvent: function () {
+  Event: function () {
     return {
       view: document.defaultView
     }
   },
+  UIEvent: function () {
+    return eventOptions.Event.apply(this, arguments)
+  },
   FocusEvent: function () {
-    return eventOptions.UIEvent.apply(this, arguments)
+    return eventOptions.Event.apply(this, arguments)
   },
   MouseEvent: function (type) {
     return {
