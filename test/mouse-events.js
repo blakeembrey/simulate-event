@@ -19,6 +19,7 @@ describe('Mouse Events', function () {
       expect(evt.clientX).to.equal(10)
       expect(evt.ctrlKey).to.equal(true)
       expect(evt.button).to.equal(1)
+      expect(evt.bubbles).to.equal(true)
     })
 
     it('should clone an existing event', function () {
