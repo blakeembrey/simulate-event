@@ -306,7 +306,7 @@ exports.generate = function (type, options) {
   var overrides = getOverrides(eventType, options)
 
   // Extend a new object with the default and passed in options.
-  if (!(options instanceof window.UIEvent)) {
+  if (!(options instanceof window.Event)) {
     options = extend({
       bubbles: true,
       cancelable: true
