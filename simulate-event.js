@@ -6,16 +6,13 @@ var extend = require('xtend')
  * @type {Object}
  */
 var eventOptions = {
-  Event: function () {
+  UIEvent: function () {
     return {
       view: document.defaultView
     }
   },
-  UIEvent: function () {
-    return eventOptions.Event.apply(this, arguments)
-  },
   FocusEvent: function () {
-    return eventOptions.Event.apply(this, arguments)
+    return eventOptions.UIEvent.apply(this, arguments)
   },
   MouseEvent: function (type) {
     return {
@@ -72,7 +69,6 @@ var eventTypes = {
   ended: 'Event',
   fullscreenchange: 'Event',
   fullscreenerror: 'Event',
-  input: 'Event',
   invalid: 'Event',
   levelchange: 'Event',
   loadeddata: 'Event',
@@ -125,6 +121,7 @@ var eventTypes = {
   focus: 'UIEvent',
   focusin: 'UIEvent',
   focusout: 'UIEvent',
+  input: 'UIEvent',
   show: 'MouseEvent',
   click: 'MouseEvent',
   dblclick: 'MouseEvent',
