@@ -30,6 +30,9 @@ var eventOptions = {
       relatedTarget: document.documentElement
     }
   },
+  WheelEvent: function (type) {
+    return eventOptions.MouseEvent.apply(this, arguments)
+  },
   KeyboardEvent: function () {
     return {
       view: document.defaultView,
@@ -104,13 +107,13 @@ var eventTypes = {
   resize: 'UIEvent',
   scroll: 'UIEvent',
   select: 'UIEvent',
-  drag: 'UIEvent',
-  dragenter: 'UIEvent',
-  dragleave: 'UIEvent',
-  dragover: 'UIEvent',
-  dragstart: 'UIEvent',
-  dragend: 'UIEvent',
-  drop: 'UIEvent',
+  drag: 'MouseEvent',
+  dragenter: 'MouseEvent',
+  dragleave: 'MouseEvent',
+  dragover: 'MouseEvent',
+  dragstart: 'MouseEvent',
+  dragend: 'MouseEvent',
+  drop: 'MouseEvent',
   touchcancel: 'UIEvent',
   touchend: 'UIEvent',
   touchenter: 'UIEvent',
@@ -265,6 +268,7 @@ var eventConstructors = {
   UIEvent: window.UIEvent,
   FocusEvent: window.FocusEvent,
   MouseEvent: window.MouseEvent,
+  WheelEvent: window.MouseEvent,
   KeyboardEvent: window.KeyboardEvent
 }
 
@@ -306,15 +310,24 @@ exports.generate = function (type, options) {
   var overrides = getOverrides(eventType, options)
 
   // Extend a new object with the default and passed in options.
+  // Existing events already have all of their defaults set.
   if (!(options instanceof window.Event)) {
-    options = extend({
-      bubbles: true,
-      cancelable: true
-    }, eventOptions[eventType](type, options), options)
+    // Check for extra defaults to pass in.
+    if (eventType in eventOptions) {
+      options = extend({
+        bubbles: true,
+        cancelable: true
+      }, eventOptions[eventType](type, options), options)
+    } else {
+      options = extend({
+        bubbles: true,
+        cancelable: true
+      }, options)
+    }
   }
 
   // Attempt the Event Constructors DOM API.
-  var Constructor = eventConstructors[eventType]
+  var Constructor = eventConstructors[eventType] || window.Event
 
   try {
     event = new Constructor(type, options)
