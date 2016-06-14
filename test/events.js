@@ -2,7 +2,7 @@
 
 describe('Events', function () {
   var eventNames = 'abort change open storage loadend popstate transitionend '
-  eventNames += 'compositionend pagehide'
+  eventNames += 'pagehide'
   var events = eventNames.split(' ')
   var fixture
 

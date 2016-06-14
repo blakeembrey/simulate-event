@@ -1,4 +1,4 @@
-var extend = require('xtend')
+var extend = require('xtend/mutable')
 
 /**
  * Set some default options.
@@ -346,11 +346,11 @@ exports.generate = function (type, options) {
 
   // In IE11, the Keyboard event does not allow setting the
   // keyCode property, even with Object.defineProperty,
-  // so we have to use a UIEvent.
-  var ua = window.navigator.userAgent
-  var msie = ua.indexOf('MSIE ')
+  // so we have to use UIEvent.
+  var ua = window.navigator.userAgent.toLowerCase()
+  var msie = Math.max(ua.indexOf('msie'), ua.indexOf('trident'))
 
-  if (msie > 0 && eventType === 'KeyboardEvent') {
+  if (msie >= 0 && eventType === 'KeyboardEvent') {
     eventType = 'UIEvent'
   }
 
@@ -394,7 +394,7 @@ exports.generate = function (type, options) {
 
   // Initialize the event using the built-in method.
   event[initEvent].apply(
-    event, [type, event.bubbles, event.cancelable].concat(args)
+    event, [type, options.bubbles, options.cancelable].concat(args)
   )
 
   // Add the override properties.
