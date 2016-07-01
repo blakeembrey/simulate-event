@@ -17,6 +17,7 @@ var eventOptions = {
   MouseEvent: function (type) {
     return {
       button: 0,
+      bubbles: (type !== 'mouseenter' && type !== 'mouseleave'),
       cancelable: (type !== 'mouseenter' && type !== 'mouseleave'),
       ctrlKey: false,
       altKey: false,

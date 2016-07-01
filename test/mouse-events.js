@@ -92,7 +92,7 @@ describe('Mouse Events', function () {
 
       expect(spy).to.have.been.calledOnce
       var evt = spy.getCall(0).args[0]
-      expect(evt.bubbles).to.equal(true)
+      expect(evt.bubbles).to.equal(false)
       expect(evt.cancelable).to.equal(false)
     })
   })
@@ -106,7 +106,7 @@ describe('Mouse Events', function () {
 
       expect(spy).to.have.been.calledOnce
       var evt = spy.getCall(0).args[0]
-      expect(evt.bubbles).to.equal(true)
+      expect(evt.bubbles).to.equal(false)
       expect(evt.cancelable).to.equal(false)
     })
   })
