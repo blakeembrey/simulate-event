@@ -20,6 +20,7 @@ describe('Mouse Events', function () {
       expect(evt.ctrlKey).to.equal(true)
       expect(evt.button).to.equal(1)
       expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
 
     it('should clone an existing event', function () {
@@ -61,6 +62,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mousedown')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 
@@ -72,6 +76,10 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mouseup')
 
       expect(spy).to.have.been.calledOnce
+
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 
@@ -83,6 +91,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mouseenter')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(false)
     })
   })
 
@@ -94,6 +105,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mouseleave')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(false)
     })
   })
 
@@ -105,6 +119,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mouseover')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 
@@ -116,6 +133,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mousemove')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 
@@ -127,6 +147,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'mouseout')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 
@@ -138,6 +161,9 @@ describe('Mouse Events', function () {
       simulateEvent.simulate(fixture, 'contextmenu')
 
       expect(spy).to.have.been.calledOnce
+      var evt = spy.getCall(0).args[0]
+      expect(evt.bubbles).to.equal(true)
+      expect(evt.cancelable).to.equal(true)
     })
   })
 })
